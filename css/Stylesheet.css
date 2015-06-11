@@ -1,0 +1,64 @@
+.start-panel {
+    text-align: center;
+}
+
+.logo-text {
+    text-align: center;
+}
+
+#back-button {
+    float: left;
+}
+
+#next-game-button {
+    float: left;
+}
+
+#refresh-button {
+    float: left;
+}
+
+.games-buttons {
+    float: right;
+    margin-top: -50px;
+}
+
+
+.gridContainer {
+    position: relative;
+    margin-top: 10px;
+    padding: 0 0 0 0;
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+}
+.cell {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    float: left;
+    z-index: 0;
+    font-size: 18px;
+    color: #888888;
+    text-align: center;
+    line-height: 36px;
+    border-style: solid outset;
+    border-width: 1px;
+    border-color: black;
+    cursor: pointer;
+}
+.cell:hover {
+    background: grey;
+}
+.cell:hover:after {
+    content: attr(data-hover-text);
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    font-size: x-small;
+    font-weight: normal;
+    font-style: normal;
+    color: #444444;
+    text-align: left;
+    line-height: 1;
+}
+
