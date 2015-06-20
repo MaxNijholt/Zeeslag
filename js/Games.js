@@ -21,23 +21,29 @@ function GamesView(model){
 
         $('#games-list').html('');
 
-        $.each(array, function(key, value) {
-            var appendHTML = '<div class="panel panel-default">' +
+        var htmleen =  '<div class="panel panel-default">' +
                 '<table class="table">' +
                 '<tr>' +
                 '<td><b>Game-ID</b></td>' +
                 '<td><b>Tegenstander</b></td>' +
                 '<td><b>Status</b></td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>' + value._id + '</td>' +
-                '<td>' + value.enemyName + '</td>' +
-                '<td>' + value.status + '</td>' +
-                '</tr>' +
-                '</div>';
+                '</tr>';
+        var htmltwee = '';
+        var htmldrie = '</div>';
+        $.each(array, function(key, value) {
+            htmltwee = htmltwee + 
+                '<tr id="update-stuk">' +
+                    '<td id="id">' + value._id + '</td>' +
+                    '<td id="name">' + value.enemyName + '</td>' +
+                    '<td id="status">' + value.status + '</td>' +
+                '</tr>';
             console.log(key, value);
-            $(appendHTML).appendTo($('#games-list'));
+            
         });
+
+        var htmltotaal = htmleen + htmltwee + htmldrie;
+
+        $(htmltotaal).appendTo($('#games-list'));
     }
 }
 
@@ -46,7 +52,7 @@ function GamesModel() {
     this.getGamesFromAPI = function(callback) {
         $.ajax({
             url:    'https://zeeslagavans.herokuapp.com/users/me/games?token='
-            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ImFtYmFra2VyMUBhdmFucy5ubCI.opl6vYsBdYBruG9cnZz2P_JnN4b60T7XOjs4-DmZbYk",
+            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function(result) {
                 callback(result);
             },
@@ -54,9 +60,41 @@ function GamesModel() {
         });
     }
 
-    this.submitNewGame = function() {
+    this.submitNewGame = function(){
         
     }
+
+    this.getAIGame = function(){
+        $.ajax({
+            url:    'https://zeeslagavans.herokuapp.com/'+ 'games/AI' +'?token='
+            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
+            success: function() {
+                console.log("ai game gemaakt");
+            },
+        });
+    }
+
+    this.postGameboard = function(id, obj) {
+        $.ajax({
+            type: "POST",
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ id +'/gameboard' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            data: obj,
+            succes: function() {
+                console.log("Post is gedaan");
+            }
+        });
+    }
+
+    this.deleteGames = function() {
+        $.ajax({
+            url: 'https://zeeslagavans.herokuapp.com/'+'users/me/games'+'?token=' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4', 
+            type: 'DELETE',
+            succes: function() {
+                console.log("games verwijderd");
+            }
+        });
+    }
+
 
 }
 
@@ -83,9 +121,24 @@ function GamesController(view, model) {
             model.getGamesFromAPI(view.renderGames);
         });
 
-        $('body').on('click','#new-game-button',function(){
-            model.submitNewGame();
+        $('body').on('click','#new-game-button-pc',function(){
+            model.getAIGame();
+            model.getGamesFromAPI(view.renderGames);
+        });
+
+        $('body').on('click','#delete-games-button',function(){
+            model.deleteGames();
+            model.getGamesFromAPI(view.renderGames);
         });
     }
+    /*
+    var server = 'https://zeeslagavans.herokuapp.com/';
+    var options = {
+      query: "token=" + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4' ,
+    };
+    var socket = io.connect(server, options);
 
+    socket.on('update', function(gameId){
+        model.getGamesFromAPI(view.renderGames);
+    });*/
 }

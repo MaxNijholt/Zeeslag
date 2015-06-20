@@ -7,7 +7,7 @@ function ShipsModel() {
     this.getShipsFromAPI = function(callback) {
         $.ajax({
             url:    'https://zeeslagavans.herokuapp.com/ships?token='
-            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ImFtYmFra2VyMUBhdmFucy5ubCI.opl6vYsBdYBruG9cnZz2P_JnN4b60T7XOjs4-DmZbYk",
+            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function(result) {
                 callback(result);
             },
