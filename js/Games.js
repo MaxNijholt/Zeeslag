@@ -36,6 +36,7 @@ function GamesView(model){
                     '<td id="id">' + value._id + '</td>' +
                     '<td id="name">' + value.enemyName + '</td>' +
                     '<td id="status">' + value.status + '</td>' +
+                    '<td><button id="playbutton" class="btn btn-primary" gameID='+ value._id +'>Play</button></td>'
                 '</tr>';
             console.log(key, value);
             
@@ -98,9 +99,10 @@ function GamesModel() {
 
     this.shoot = function (id, x, y){
 
-        var shot = {[
-            {"x":x, "y":y}
-        ]}
+        var shot = {
+            "x":x, 
+            "y":y
+        };
 
         $.ajax({
             type: "POST",
@@ -117,6 +119,8 @@ function GamesModel() {
 function GamesController(view, model) {
     this._model = model;
     this._view = view;
+
+    model.getGamesFromAPI(view.renderGames);
 
     this.renderView = function() {
         this._view.loadView();
@@ -146,6 +150,11 @@ function GamesController(view, model) {
             model.deleteGames();
             model.getGamesFromAPI(view.renderGames);
         });
+
+        $('body').on('click','#playbutton',function(){
+            console.log("click");
+        });
+
     }
     /*
     var server = 'https://zeeslagavans.herokuapp.com/';
