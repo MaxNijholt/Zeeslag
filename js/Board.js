@@ -21,6 +21,7 @@ function GameBoard() {
     Generate.start = function () {
         clearScreen();
         generateBoardPage();
+        generateBoardPage();
         createGrid();
         console.log("Het bord staat klaar");
     };
@@ -55,11 +56,13 @@ function GameBoard() {
 
     function generateBoardPage() {
         $('.container').append(
-            '<div id="zeeslag" class="zeeslag">' +
-        '        <div id="zeeslagHeader">' +
-        '        <h2>Zeeslag</h2>' +
-        '        </div>' +
-        '        <div id="grid" class="gridContainer"></div>' +
+        '<div class="col-xs-6">'
+        '       <div id="zeeslag" class="zeeslag">' +
+        '           <div id="zeeslagHeader">' +
+        '               <h2>Zeeslag</h2>' +
+        '           </div>' +
+        '           <div id="grid" class="gridContainer"></div>' +
+        '       </div>' +
         '    </div>');
     }
 

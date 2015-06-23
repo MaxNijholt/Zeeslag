@@ -50,6 +50,10 @@ function GamesView(model){
 
 function GamesModel() {
 
+    var self = this;
+
+    self.TheGame = null;
+
     this.getGamesFromAPI = function(callback) {
         $.ajax({
             url:    'https://zeeslagavans.herokuapp.com/users/me/games?token='
@@ -117,8 +121,11 @@ function GamesModel() {
 }
 
 function GamesController(view, model) {
+    var self = this;
     this._model = model;
     this._view = view;
+
+
 
     model.getGamesFromAPI(view.renderGames);
 
@@ -152,9 +159,13 @@ function GamesController(view, model) {
         });
 
         $('body').on('click','#playbutton',function(){
-            console.log("click");
-        });
+            var gameId = $(this).attr('gameID');
+            console.log(gameId);
 
+            startModel.gameController = new GameController(gameId);
+
+
+        });
     }
     /*
     var server = 'https://zeeslagavans.herokuapp.com/';

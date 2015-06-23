@@ -12,7 +12,9 @@ function StartView(model){
 }
 
 function StartModel() {
-    /** Een leeg model */
+    var gameModel;
+    var gameController;
+    var gameView;
 }
 
 function StartController(view, model) {
@@ -41,6 +43,8 @@ function StartController(view, model) {
         $('body').on('click','#about-button',function(){
             console.log("Play about pressed");
         });
+
+        
     }
 
 }

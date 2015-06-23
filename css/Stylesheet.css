@@ -18,6 +18,10 @@
     float: left;
 }
 
+#delete-button {
+    float: left;
+}
+
 .games-buttons {
     float: right;
     margin-top: -50px;
