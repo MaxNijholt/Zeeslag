@@ -71,6 +71,7 @@ function GamesModel() {
             success: function() {
                 console.log("ai game gemaakt");
             },
+            dataType: "json"
         });
     }
 
@@ -95,6 +96,21 @@ function GamesModel() {
         });
     }
 
+    this.shoot = function (id, x, y){
+
+        var shot = {[
+            {"x":x, "y":y}
+        ]}
+
+        $.ajax({
+            type: "POST",
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ id +'/shots' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            data: shot,
+            succes: function() {
+                console.log("Post shots is gedaan");
+            }
+        });
+    }
 
 }
 
