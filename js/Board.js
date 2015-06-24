@@ -1,8 +1,6 @@
 /**
  * Created by Toine Bakkeren on 6/2/2015.
  */
-
-
 function GameBoard() {
 
 }
@@ -33,7 +31,7 @@ function GameBoard() {
 
         for (var i = 1; i <= GRID_ROWS; i++) {
             for (var j = 1; j <= GRID_COLS; j++) {
-                $("<div class='cell' id='"+ String.fromCharCode(65+i); +","+j+"'></div>")
+                $("<div class='cell' id='"+ String.fromCharCode(65+i) +","+j+"'></div>")
                     .appendTo(newGrid);
             }
         }
