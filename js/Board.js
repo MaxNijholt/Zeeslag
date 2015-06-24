@@ -27,10 +27,11 @@ function gameBoardController() {
 
         for (var i = 1; i <= GRID_ROWS; i++) {
             for (var j = 1; j <= GRID_COLS; j++) {
-                $("<div class='cell' posX='"+ String.fromCharCode(64+j) +"' posY='"+i+"'></div>")
+                $("<div class='cell' posX='"+ String.fromCharCode(64+j) +"' posY='"+i+"' title="+String.fromCharCode(64+j)+i+" ></div>")
                     .appendTo(newGrid);
             }
         }
+        $(cell).tooltip();
 
         newGrid.height(38 * GRID_ROWS);
         newGrid.width(38 * GRID_COLS);
@@ -103,6 +104,9 @@ function gameBoardController() {
                 }
             }
         }
+        
+
+
     }
 }
 

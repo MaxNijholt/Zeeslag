@@ -33,13 +33,25 @@ function GamesView(model){
         var htmltwee = '';
         var htmldrie = '</div>';
         $.each(array, function(key, value) {
-            htmltwee = htmltwee + 
+            if(value.enemyName == undefined){
+                value.enemyName = "Tegenstander wordt gezocht!";
+                htmltwee = htmltwee + 
+                '<tr id="update-stuk">' +
+                    '<td id="id">' + value._id + '</td>' +
+                    '<td id="name">' + value.enemyName + '</td>' +
+                    '<td id="status">' + value.status + '</td>' +
+                    '<td><button id="noplaybutton" class="btn btn-default disabled" gameID='+ value._id +'>Play</button></td>'
+                '</tr>';
+            } else{
+                htmltwee = htmltwee + 
                 '<tr id="update-stuk">' +
                     '<td id="id">' + value._id + '</td>' +
                     '<td id="name">' + value.enemyName + '</td>' +
                     '<td id="status">' + value.status + '</td>' +
                     '<td><button id="playbutton" class="btn btn-primary" gameID='+ value._id +'>Play</button></td>'
                 '</tr>';
+            }
+            
             console.log(key, value);
             
         });
@@ -135,6 +147,11 @@ function GamesController(view, model) {
 
         $('body').on('click','#new-game-button-pc',function(){
             model.getAIGame();
+            model.getGamesFromAPI(view.renderGames);
+        });
+
+        $('body').on('click','#new-game-button-human',function(){
+            model.getHumanGame();
             model.getGamesFromAPI(view.renderGames);
         });
 
