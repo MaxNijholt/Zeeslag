@@ -44,6 +44,27 @@ function gameBoardController() {
         console.log(startCell);
         console.log(length);
         console.log(horizontal);
+
+        if (horizontal) {
+            $(startCell).css("backgroundColor", "blue");
+            for (var i = 1; i < length; i++) {
+                var posy = parseInt($(startCell).attr('posy'))+i;
+                var posx = $(startCell).attr('posx');
+                console.log(posy);
+
+                $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+            }
+        }
+        else {
+            $(startCell).css("backgroundColor", "blue");
+            for (var i = 1; i < length; i++) {
+                var posy = parseInt($(startCell).attr('posy'))+i;
+                var posx = $(startCell).attr('posx');
+                console.log(posy);
+
+                $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+            }
+        }
     }
 }
 

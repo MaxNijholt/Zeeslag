@@ -155,7 +155,11 @@
 
         $('.container').on('click', '.cell', function() {
             if ( typeof self.selectedShip === "undefined") {
-                alert("Selecteer eerst een schip");
+                if ($(this).css("backgroundColor") === 'rgb(0, 0, 255)') {
+                    console.log('Draai');
+                } else{
+                    alert("Selecteer eerst een schip");
+                }
             }
             else{
                 self.boardControl.placeShip($(this), self.selectedShipLength, false);
