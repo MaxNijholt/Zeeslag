@@ -23,7 +23,8 @@
     }
 
     self.renderBoats = function(ships){
-        var shipsHTML = "<div class='available-ships col-md-3 panel panel-default'><h3>Beschikbare schepen</h3></div>"
+        $('.available-ships').remove();
+        var shipsHTML = "<div class='available-ships col-md-3 panel panel-default' style='margin-top:10px;'><h3>Beschikbare schepen</h3></div>"
         $(shipsHTML).appendTo('#zeeslag');
     	console.log(ships);
 
@@ -124,9 +125,7 @@
         if (data['status'] === 'setup') {
             $('#beurtIndicator').text("Zet je schepen neer om te beginnen.");
             self.shipModel.getShipsFromAPI(self.gameView.renderBoats);
-            window.setTimeout(self.boatListeners,1000);
-            
-            self.setupMode();
+            window.setTimeout(self.setupMode,1000);
         }
         else {
             if (data['yourTurn'] === true) {
@@ -141,7 +140,7 @@
         
     }
 
-    self.boatListeners = function() {
+    self.setupMode = function() {
 
         var shipData = [];
         var placedShips = 0;
@@ -176,10 +175,28 @@
                 self.selectedShip = undefined;
             }
         });
+
+        $('.container').on('click','#btn-back',function(){
+            var gamesModel = new GamesModel();
+            var gamesView = new GamesView(gamesModel);
+            app.gamesController = new GamesController(gamesView,gamesModel);
+            app.gamesController.renderView();
+        });
+
+        $('.container').on('click','#btn-send',function(){
+            if (shipData.length < 5) {
+                alert('Je moet alle schepen op het veld zetten!');
+            }
+            else {
+                self.postSetup(shipData);
+            }
+        });
     }
 
-    self.setupMode = function() {
-        console.log('Being met setup');
+    self.postSetup = function(shipData) {
+        console.log(JSON.stringify(shipData));
+
+
     }
  }
 
