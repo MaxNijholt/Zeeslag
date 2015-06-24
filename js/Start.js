@@ -3,7 +3,8 @@
  */
 
 function StartView(model){
-    this._model = model;
+    var self = this;
+    self._model = model;
 
     this.loadView = function() {
         $('.container').load("views/startView");
@@ -12,28 +13,25 @@ function StartView(model){
 }
 
 function StartModel() {
-    var gameModel;
-    var gameController;
-    var gameView;
 }
 
 function StartController(view, model) {
-    this._model = model;
-    this._view = view;
+    var self = this;
+    self._model = model;
+    self._view = view;
 
-    this.startGame = function() {
-        this._view.loadView();
-        this.addActions();
+    self.startGame = function() {
+        self._view.loadView();
+        self.addActions();
     }
 
-    this.addActions = function() {
+    self.addActions = function() {
         $('body').on('click','#play-button',function(){
             console.log("Play button pressed");
             var gamesModel = new GamesModel();
             var gamesView = new GamesView(gamesModel);
-            var gamesController = new GamesController(gamesView,gamesModel);
-
-            gamesController.renderView();
+            app.gamesController = new GamesController(gamesView,gamesModel);
+            app.gamesController.renderView();
         });
 
         $('body').on('click','#rules-button',function(){
@@ -43,15 +41,26 @@ function StartController(view, model) {
         $('body').on('click','#about-button',function(){
             console.log("Play about pressed");
         });
-
-        
     }
-
 }
 
+app = {
+    startController: null, 
+    gameController: null, 
+    gamesController: null,
+    startModel: null, 
+    startView: null,
+    init: function(){
+        app.startModel = new StartModel();
+        app.startView = new StartView(app.startModel);
+        app.startController = new StartController(app.startView, app.startModel);
+        app.startController.startGame();
+    },
+    game: function(id){
+        app.gameController = new gameController(id);
+    }
+};
+
 $(document).ready(function () {
-    var startModel = new StartModel();
-    var startView = new StartView(startModel);
-    var startController = new StartController(startView, startModel);
-    startController.startGame();
+    app.init();
 })

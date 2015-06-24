@@ -21,7 +21,6 @@ function GameBoard() {
     Generate.start = function () {
         clearScreen();
         generateBoardPage();
-        generateBoardPage();
         createGrid();
         console.log("Het bord staat klaar");
     };
@@ -34,7 +33,7 @@ function GameBoard() {
 
         for (var i = 1; i <= GRID_ROWS; i++) {
             for (var j = 1; j <= GRID_COLS; j++) {
-                $("<div class='cell' id='"+i+","+j+"'></div>")
+                $("<div class='cell' id='"+ String.fromCharCode(65+i); +","+j+"'></div>")
                     .appendTo(newGrid);
             }
         }
@@ -51,12 +50,12 @@ function GameBoard() {
 
     function clearScreen() {
         $('#container').html('');
-        console.log("Ik heb het scherm leeg gemaakt!")
+        console.log("Ik heb het scherm leeg gemaakt!");
     }
 
     function generateBoardPage() {
         $('.container').append(
-        '<div class="col-xs-6">'
+        '<div class="col-xs-6">' +
         '       <div id="zeeslag" class="zeeslag">' +
         '           <div id="zeeslagHeader">' +
         '               <h2>Zeeslag</h2>' +

@@ -8,29 +8,62 @@
     Generate.start()
 });
  * */
+ var localid = null;
 
  function gameView(model){
- 	this._model = model;
+ 	var self = this;
 
-    this.loadView = function() {
-        $('.container').load("views/gameboardView");
+ 	self._model = model;
+
+    self.loadView = function() {
+        $('.container').load("views/gameboardView.html");
         console.log("Field")
     }
 
-    this.renderfield = function(){
+    self.renderfield = function(){
     	//dostuff
     }
  }
 
  function gameModel(){
+ 	var self = this;
 
+    self.shoot = function (x, y){
+
+        var shot = {
+            "x":x, 
+            "y":y
+        };
+
+        $.ajax({
+            type: "POST",
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            data: shot,
+            succes: function() {
+                console.log("Post shots is gedaan");
+            }
+        });
+    }
+
+    self.postGameboard = function(obj) {
+        $.ajax({
+            type: "POST",
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/gameboard' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            data: obj,
+            succes: function() {
+                console.log("Post is gedaan");
+            }
+        });
+    }
  }
 
- function gameController(view, model, id){
+ function gameController(id){
  	var self = this;
-    this._model = model;
-    this._view = view;
-	console.log("i get here with: " + id);
+ 	self.localid = id;
+ 	self.model = new gameModel;
+ 	self.gameView = new gameView(self.model);
+	console.log("i get here with: " + localid);
+	self.gameView.loadView();
  }
 
 

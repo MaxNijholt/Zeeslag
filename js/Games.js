@@ -9,13 +9,15 @@
 function GamesView(model){
     this._model = model;
 
-    this.loadView = function() {
+    var self = this;
+
+    self.loadView = function() {
         $('.container').load("views/gamesView.html");
 
         console.log("Laad de games view in")
     }
 
-    this.renderGames = function(array){
+    self.renderGames = function(array){
         console.log("Ik ben weer in de view!");
         console.log(array);
 
@@ -54,7 +56,7 @@ function GamesModel() {
 
     self.TheGame = null;
 
-    this.getGamesFromAPI = function(callback) {
+    self.getGamesFromAPI = function(callback) {
         $.ajax({
             url:    'https://zeeslagavans.herokuapp.com/users/me/games?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
@@ -65,11 +67,11 @@ function GamesModel() {
         });
     }
 
-    this.submitNewGame = function(){
+    self.submitNewGame = function(){
         
     }
 
-    this.getAIGame = function(){
+    self.getAIGame = function(){
         $.ajax({
             url:    'https://zeeslagavans.herokuapp.com/'+ 'games/AI' +'?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
@@ -80,18 +82,18 @@ function GamesModel() {
         });
     }
 
-    this.postGameboard = function(id, obj) {
+    self.getHumanGame = function(){
         $.ajax({
-            type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ id +'/gameboard' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
-            data: obj,
-            succes: function() {
-                console.log("Post is gedaan");
-            }
+            url:    'https://zeeslagavans.herokuapp.com/'+ 'games' +'?token='
+            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
+            success: function() {
+                console.log("human game gemaakt");
+            },
+            dataType: "json"
         });
     }
 
-    this.deleteGames = function() {
+    self.deleteGames = function() {
         $.ajax({
             url: 'https://zeeslagavans.herokuapp.com/'+'users/me/games'+'?token=' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4', 
             type: 'DELETE',
@@ -101,40 +103,23 @@ function GamesModel() {
         });
     }
 
-    this.shoot = function (id, x, y){
 
-        var shot = {
-            "x":x, 
-            "y":y
-        };
-
-        $.ajax({
-            type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ id +'/shots' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
-            data: shot,
-            succes: function() {
-                console.log("Post shots is gedaan");
-            }
-        });
-    }
 
 }
 
 function GamesController(view, model) {
     var self = this;
-    this._model = model;
-    this._view = view;
-
-
+    self._model = model;
+    self._view = view;
 
     model.getGamesFromAPI(view.renderGames);
 
-    this.renderView = function() {
-        this._view.loadView();
-        this.addActions();
+    self.renderView = function() {
+        self._view.loadView();
+        self.addActions();
     }
 
-    this.addActions = function() {
+    self.addActions = function() {
         $('body').on('click','#back-button',function(){
             console.log("Play button pressed");
             var startModel = new StartModel();
@@ -159,12 +144,10 @@ function GamesController(view, model) {
         });
 
         $('body').on('click','#playbutton',function(){
-            var gameId = $(this).attr('gameID');
+            gameId = $(this).attr('gameID');
             console.log(gameId);
-
-            startModel.gameController = new GameController(gameId);
-
-
+            //debugger;
+            app.game(gameId);
         });
     }
     /*
