@@ -68,3 +68,7 @@
     line-height: 1;
 }
 
+.available-ships {
+    float :right;
+    border: 1px solid black;
+}

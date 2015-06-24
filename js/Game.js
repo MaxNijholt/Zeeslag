@@ -22,8 +22,26 @@
         //console.log("Field")
     }
 
-    self.renderfield = function(){
-    	//dostuff
+    self.renderBoats = function(ships){
+        var shipsHTML = "<div class='available-ships col-md-3 panel panel-default'><h3>Beschikbare schepen</h3></div>"
+        $(shipsHTML).appendTo('#zeeslag');
+    	console.log(ships);
+
+        var htmleen = '<table class="table">';
+        var htmltwee = '';
+        var htmldrie = '</table>';
+
+        $.each(ships, function(key, value) {
+            var ship = '<tr>' +
+                '<td> <button class="ship btn btn-default" shiplength="' + value.length + '" shipname="' + value.name + '">'+ value.name + '</button></td>' +
+                    '</tr>';
+            htmltwee = htmltwee + ship;
+                       
+        });
+
+        var htmlcompleet = htmleen + htmltwee + htmldrie;
+        $(htmlcompleet).appendTo('.available-ships');
+        console.log('Klaar');
     }
  }
 
@@ -72,8 +90,13 @@
  function gameController(gameId){
  	var self = this;
  	self.localid = gameId;
+    self.selectedShip;
+
  	self.model = new gameModel;
  	self.gameView = new gameView(self.model);
+
+    self.shipModel = new ShipsModel();
+
     self.boardControl = new gameBoardController();
 	
     self.startGame = function(){
@@ -99,7 +122,11 @@
         console.log(data);
 
         if (data['status'] === 'setup') {
-            $('#beurtIndicator').text("Het is jouw beurt!");
+            $('#beurtIndicator').text("Zet je schepen neer om te beginnen.");
+            self.shipModel.getShipsFromAPI(self.gameView.renderBoats);
+            window.setTimeout(self.boatListeners,1000);
+            
+            self.setupMode();
         }
         else {
             if (data['yourTurn'] === true) {
@@ -114,6 +141,33 @@
         
     }
 
+    self.boatListeners = function() {
+        var placedShips = 0;
+
+        console.log('Klikkers');
+        $('.container').on('click','.ship',function(){
+            self.selectedShip = $(this).attr('shipname');
+            self.selectedShipLength = $(this).attr('shiplength');
+
+            console.log(self.selectedShip);
+            this.disabled = true;
+        });
+
+        $('.container').on('click', '.cell', function() {
+            if ( typeof self.selectedShip === "undefined") {
+                alert("Selecteer eerst een schip");
+            }
+            else{
+                self.boardControl.placeShip($(this), self.selectedShipLength, false);
+                placedShips++;
+                self.selectedShip = undefined;
+            }
+        });
+    }
+
+    self.setupMode = function() {
+        console.log('Being met setup');
+    }
  }
 
 
