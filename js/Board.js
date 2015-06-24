@@ -27,7 +27,7 @@ function gameBoardController() {
 
         for (var i = 1; i <= GRID_ROWS; i++) {
             for (var j = 1; j <= GRID_COLS; j++) {
-                $("<div class='cell' posX='"+ String.fromCharCode(65+i) +"' posY='"+j+"'></div>")
+                $("<div class='cell' posX='"+ String.fromCharCode(64+j) +"' posY='"+i+"'></div>")
                     .appendTo(newGrid);
             }
         }
@@ -40,31 +40,62 @@ function gameBoardController() {
         return newGrid;
     };
 
-    self.placeShip = function(startCell, length, horizontal) {
+    self.placeShip = function(startCell, length) {
         console.log(startCell);
         console.log(length);
-        console.log(horizontal);
 
-        if (horizontal) {
+        $(startCell).css("backgroundColor", "blue");
+        for (var i = 1; i < length; i++) {
+            var posy = parseInt($(startCell).attr('posy'))+i;
+            var posx = $(startCell).attr('posx');
+            console.log(posy);
+
+            $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+        }
+    }
+    
+
+    self.turnShip = function(startCell, length) {
+        if (horizontal === true) {
+            $(startCell).css("backgroundColor", "white");
+            for (var i = 1; i < length; i++) {
+                var posy = parseInt($(startCell).attr('posy'));
+                var posx = $(startCell).attr('posx');
+                console.log(posy);
+
+                $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "white");
+            }
+
             $(startCell).css("backgroundColor", "blue");
             for (var i = 1; i < length; i++) {
-                var posy = parseInt($(startCell).attr('posy'))+i;
+                var posy = parseInt($(startCell).attr('posy'));
+                var posx = String.fromCharCode($(startCell).attr('posx').charCodeAt(0)+i);
+                console.log(posy);
+
+                $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+            }
+        } else{
+            
+            $(startCell).css("backgroundColor", "white");
+            for (var i = 1; i < length; i++) {
+                var posy = parseInt($(startCell).attr('posy'));
+                var posx = String.fromCharCode($(startCell).attr('posx').charCodeAt(0)+i);
+                console.log(posy);
+
+                $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "white");
+            }
+
+            $(startCell).css("backgroundColor", "blue");
+            for (var i = 1; i < length; i++) {
+                var posy = parseInt($(startCell).attr('posy'));
                 var posx = $(startCell).attr('posx');
                 console.log(posy);
 
                 $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
             }
         }
-        else {
-            $(startCell).css("backgroundColor", "blue");
-            for (var i = 1; i < length; i++) {
-                var posy = parseInt($(startCell).attr('posy'))+i;
-                var posx = $(startCell).attr('posx');
-                console.log(posy);
+        
 
-                $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
-            }
-        }
     }
 }
 

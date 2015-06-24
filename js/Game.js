@@ -142,6 +142,8 @@
     }
 
     self.boatListeners = function() {
+
+        var shipData = [];
         var placedShips = 0;
 
         console.log('Klikkers');
@@ -157,13 +159,20 @@
             if ( typeof self.selectedShip === "undefined") {
                 if ($(this).css("backgroundColor") === 'rgb(0, 0, 255)') {
                     console.log('Draai');
+
+                    self.boardControl.turnShip($(this), self.selectedShipLength);
                 } else{
                     alert("Selecteer eerst een schip");
                 }
             }
             else{
-                self.boardControl.placeShip($(this), self.selectedShipLength, false);
+                self.boardControl.placeShip($(this), self.selectedShipLength);
                 placedShips++;
+                
+                var ship = {name:self.selectedShip, length:self.selectedShipLength, startX:$(this).attr('posx'), startY:$(this).attr('posy')};
+                shipData.push(ship);
+                console.log(shipData);
+
                 self.selectedShip = undefined;
             }
         });
