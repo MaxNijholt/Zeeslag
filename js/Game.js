@@ -156,11 +156,11 @@
         });
 
         $('.container').on('click', '.cell', function() {
+
             if ( typeof self.selectedShip === "undefined") {
                 if ($(this).css("backgroundColor") === 'rgb(0, 0, 255)') {
                     console.log('Draai');
-
-                    self.boardControl.turnShip($(this), self.selectedShipLength);
+                    self.boardControl.turnShip($(this), self.selectedShipLength, true, shipData);                                                  
                 } else{
                     alert("Selecteer eerst een schip");
                 }
@@ -169,7 +169,7 @@
                 self.boardControl.placeShip($(this), self.selectedShipLength);
                 placedShips++;
                 
-                var ship = {name:self.selectedShip, length:self.selectedShipLength, startX:$(this).attr('posx'), startY:$(this).attr('posy')};
+                var ship = {name:self.selectedShip, length:self.selectedShipLength, startX:$(this).attr('posx'), startY:$(this).attr('posy'), horizontal:false};
                 shipData.push(ship);
                 console.log(shipData);
 
