@@ -57,13 +57,19 @@
     }
  }
 
- function gameController(id){
+ function gameController(gameId){
  	var self = this;
- 	self.localid = id;
+ 	self.localid = gameId;
  	self.model = new gameModel;
  	self.gameView = new gameView(self.model);
-	console.log("i get here with: " + localid);
-	self.gameView.loadView();
+	
+    self.startGame = function(){
+        console.log("i get here with: " + self.localid);
+        
+        self.gameView.loadView();
+
+    }
+
  }
 
 

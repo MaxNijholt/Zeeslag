@@ -144,10 +144,12 @@ function GamesController(view, model) {
         });
 
         $('body').on('click','#playbutton',function(){
-            gameId = $(this).attr('gameID');
+            var gameId = $(this).attr('gameID');
             console.log(gameId);
             //debugger;
-            app.game(gameId);
+            //app.game(gameId);
+            var game = new gameController(gameId);
+            game.startGame();
         });
     }
     /*
