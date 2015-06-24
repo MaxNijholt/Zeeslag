@@ -43,6 +43,10 @@
         $(htmlcompleet).appendTo('.available-ships');
         console.log('Klaar');
     }
+
+    self.renderFielddata = function(game){
+    	console.log(game);
+    }
  }
 
  function gameModel(){
@@ -57,7 +61,8 @@
 
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + 
+            	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: shot,
             succes: function() {
                 console.log("Post shots is gedaan");
@@ -68,7 +73,8 @@
     self.getGame = function(gameID, callback) {
         $.ajax({
             type: "GET",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID + '?token=' + 
+            	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             success: function(result) {
                 callback(result);
             }
@@ -78,7 +84,8 @@
     self.postGameboard = function(obj) {
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/gameboard' + '?token=' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/gameboard' + '?token=' + 
+            	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
             succes: function() {
                 console.log("Post is gedaan");
@@ -129,6 +136,8 @@
             self.setupMode();
         }
         else {
+        	self.model.getGame(gameId, self.gameView.renderFielddata);
+
             if (data['yourTurn'] === true) {
                 $('#beurtIndicator').text("Het is jouw beurt!");
                 console.log('Jouw beurt');
