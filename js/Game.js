@@ -68,7 +68,6 @@
 			}else {
 				$("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "yellow");
 			}
-			
     	});
     }
  }
@@ -190,7 +189,6 @@
     }
 
     self.setupMode = function() {
-
         var shipData = [];
         var placedShips = 0;
 
@@ -297,9 +295,3 @@
         app.gamesController.renderView();    
     }
  }
-
-
- 
-
-
-
