@@ -82,10 +82,10 @@
         });
     }
 
-    self.postGameboard = function(obj) {
+    self.postGameboard = function(gameID, obj) {
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/gameboard' + '?token=' + 
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID +'/gameboard' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
             succes: function() {
@@ -186,10 +186,7 @@
         });
 
         $('.container').on('click','#btn-back',function(){
-            var gamesModel = new GamesModel();
-            var gamesView = new GamesView(gamesModel);
-            app.gamesController = new GamesController(gamesView,gamesModel);
-            app.gamesController.renderView();
+            self.openGamesScreen();
         });
 
         $('.container').on('click','#btn-send',function(){
@@ -203,9 +200,23 @@
     }
 
     self.postSetup = function(shipData) {
-        console.log(JSON.stringify(shipData));
+        //console.log(JSON.stringify(shipData));
+        var ships = self.shipModel.getShipsForProcessing();
+        
+        window.setTimeout(console.log(self.shipModel.getShipsForProcessing()),1000);
 
 
+        self.model.postGameboard(gameId, ships);
+
+        self.openGamesScreen();
+
+    }
+
+    self.openGamesScreen = function() {
+        var gamesModel = new GamesModel();
+        var gamesView = new GamesView(gamesModel);
+        app.gamesController = new GamesController(gamesView,gamesModel);
+        app.gamesController.renderView();    
     }
  }
 
