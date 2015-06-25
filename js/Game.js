@@ -47,30 +47,51 @@
 
     self.renderFielddata = function(game){
     	console.log(game);
+    	$.each(game.myGameboard.ships, function(key, value){
+    		for (var i = 0; i < value.length; i++) {
+    			if(value.isVertical){
+					var posx = value.startCell.x.toUpperCase();
+					var posy = value.startCell.y+i;
+                    $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+    			}else{
+    				var posx = String.fromCharCode(value.startCell.x.toUpperCase().charCodeAt(0)+i);
+    				var posy = value.startCell.y;
+                       $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+    			}
+    		};
+    	});
+    	$.each(game.myGameboard.shots, function(key, value){
+			var posx = value.x.toUpperCase();
+			var posy = value.y;
+			if($("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor") == 'rgb(0, 0, 255)'){
+				$("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "red");
+			}else {
+				$("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "yellow");
+			}
+			
+    	});
     }
  }
 
  function gameModel(){
  	var self = this;
 
-    self.shoot = function (gameID, x, y){
+    self.shoot = function (x, y){
 
         var shot = {
             "x":x, 
             "y":y
         };
-        var msg = '';
 
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/shots' + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: shot,
-            success: function(data) {
-                msg = data.toLowerCase();
+            succes: function() {
+                console.log("Post shots is gedaan");
             }
         });
-        return msg;
     }
 
     self.getGame = function(gameID, callback) {
@@ -84,19 +105,25 @@
         });
     }
 
-    self.postGameboard = function(gameID, obj, callBack) {
-        console.log($.ajax({
+    self.postGameboard = function(gameID, obj) {
+    	var myurl = 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
+            	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4";
+
+            	console.log(" posting to : " + myurl);
+
+        $.ajax({
             type: "POST",
             url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
             success: function() {
-                callBack();
+                console.log("Post gameboard is gedaan");
             },
-            error : function(mes) {
-                console.log(mes);
+            error: function(xhr){
+            	console.log("post failed to " + myurl);
+            	console.log("post failed with " + obj);
             }
-        }));
+        });
     }
  }
 
@@ -120,22 +147,17 @@
             dataType: "json"
         });
 
-    self.gameIP = 'undefined'
-
     self.boardControl = new gameBoardController();
 	
     self.startGame = function(){
         console.log("i get here with: " + self.localid);
-        
         self.gameView.loadView(self.initBoard);
 
     }
 
     self.initBoard = function() {
         var boardHTML = self.boardControl.generateBoardHTML();
-
         $('#grid').replaceWith(boardHTML);
-
         self.model.getGame(self.localid, self.processData);
 
     }
@@ -151,8 +173,6 @@
         }
         else {
         	self.model.getGame(gameId, self.gameView.renderFielddata);
-
-            self.shootingMode();
 
             if (data['yourTurn'] === true) {
                 $('#beurtIndicator').text("Het is jouw beurt!");
@@ -236,42 +256,17 @@
         var postdata = {"ships" : self.ships }
         console.log(postdata);
 
-        self.model.postGameboard(gameId, postdata, self.openGamesScreen);
+        self.model.postGameboard(gameId, postdata);
 
         self.openGamesScreen();
 
     }
 
-    self.shootingMode = function() {
-        $('.container').on('click', '.cell', function() {
-            console.log(self.model.shoot(gameId, $(this).attr('posx'), $(this).attr('posy')));
-                if ($(this).css("backgroundColor") === 'rgb(255, 0, 0)' || $(this).css("backgroundColor") === 'rgb(255, 255, 0)') {
-                    alert('Je hebt hier al een keer geschoten!');                                                  
-                } else{
-                    if (self.model.shoot(gameId, $(this).attr('posx'), $(this).attr('posy')) === "boom" ) {
-                        $(this).css("backgroundColor", "red");
-                    }
-                    if (self.model.shoot(gameId, $(this).attr('posx'), $(this).attr('posy')) === "splash" ) {
-                        $(this).css("backgroundColor", "yellow");
-                    }
-                }
-        });
-        $('.container').on('click','#btn-back',function(){
-            self.openGamesScreen();
-        });
-
-        $('.container').on('click','#btn-send',function(){
-            if (shipData.length < 5) {
-                alert('Je moet alle schepen op het veld zetten!');
-            }
-            else {
-                self.postSetup(shipData);
-            }
-        });
-    }
-
     self.openGamesScreen = function() {
-        app.gamesController.renderView();
+        var gamesModel = new GamesModel();
+        var gamesView = new GamesView(gamesModel);
+        app.gamesController = new GamesController(gamesView,gamesModel);
+        app.gamesController.renderView();    
     }
  }
 

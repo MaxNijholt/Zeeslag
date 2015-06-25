@@ -29,7 +29,7 @@ function GamesView(model){
                 '<td><b>Game-ID</b></td>' +
                 '<td><b>Tegenstander</b></td>' +
                 '<td><b>Status</b></td>' +
-                '</tr>';›
+                '</tr>';
         var htmltwee = '';
         var htmldrie = '</div>';
         $.each(array, function(key, value) {
