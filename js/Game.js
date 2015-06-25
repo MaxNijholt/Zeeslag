@@ -47,6 +47,29 @@
 
     self.renderFielddata = function(game){
     	console.log(game);
+    	$.each(game.myGameboard.ships, function(key, value){
+    		for (var i = 0; i < value.length; i++) {
+    			if(value.isVertical){
+					var posx = value.startCell.x.toUpperCase();
+					var posy = value.startCell.y+i;
+                    $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+    			}else{
+    				var posx = String.fromCharCode(value.startCell.x.toUpperCase().charCodeAt(0)+i);
+    				var posy = value.startCell.y;
+                       $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
+    			}
+    		};
+    	});
+    	$.each(game.myGameboard.shots, function(key, value){
+			var posx = value.x.toUpperCase();
+			var posy = value.y;
+			if($("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor") == 'rgb(0, 0, 255)'){
+				$("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "red");
+			}else {
+				$("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "yellow");
+			}
+			
+    	});
     }
  }
 
@@ -62,7 +85,7 @@
 
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: shot,
             succes: function() {
@@ -74,7 +97,7 @@
     self.getGame = function(gameID, callback) {
         $.ajax({
             type: "GET",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             success: function(result) {
                 callback(result);
@@ -83,13 +106,22 @@
     }
 
     self.postGameboard = function(gameID, obj) {
+    	var myurl = 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
+            	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4";
+
+            	console.log(" posting to : " + myurl);
+
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
-            succes: function() {
+            success: function() {
                 console.log("Post gameboard is gedaan");
+            },
+            error: function(xhr){
+            	console.log("post failed to " + myurl);
+            	console.log("post failed with " + obj);
             }
         });
     }
@@ -107,7 +139,7 @@
     self.ships = 'undefined';
 
     $.ajax({
-            url:    'https://zeeslagavans.herokuapp.com/ships?token='
+            url:    'https://zeeslagavans2.herokuapp.com/ships?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function(result) {
                 self.ships = result;
@@ -119,16 +151,13 @@
 	
     self.startGame = function(){
         console.log("i get here with: " + self.localid);
-        
         self.gameView.loadView(self.initBoard);
 
     }
 
     self.initBoard = function() {
         var boardHTML = self.boardControl.generateBoardHTML();
-
         $('#grid').replaceWith(boardHTML);
-
         self.model.getGame(self.localid, self.processData);
 
     }
@@ -213,7 +242,7 @@
         $.each(shipData, function(key, value) {
             $.each(self.ships, function(jan, henk) {
                 if (value.name === henk.name) {
-                    henk.startCell = {"x": value.startX, "y": value.startY};
+                    henk.startCell = {"x": value.startX.toLowerCase(), "y": value.startY};
                     if (value.horizontal === true) {
                         henk.isVertical = false;
                     } else {
@@ -227,7 +256,7 @@
         var postdata = {"ships" : self.ships }
         console.log(postdata);
 
-        self.model.postGameboard(gameId, JSON.parse(JSON.stringify(self.ships)));
+        self.model.postGameboard(gameId, postdata);
 
         self.openGamesScreen();
 
