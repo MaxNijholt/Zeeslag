@@ -85,7 +85,7 @@
     self.postGameboard = function(gameID, obj) {
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID +'/gameboard' + '?token=' + 
+            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
             succes: function() {
