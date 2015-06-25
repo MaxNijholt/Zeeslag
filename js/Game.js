@@ -104,6 +104,16 @@
  	self.gameView = new gameView(self.model);
 
     self.shipModel = new ShipsModel();
+    self.ships = 'undefined';
+
+    $.ajax({
+            url:    'https://zeeslagavans.herokuapp.com/ships?token='
+            + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
+            success: function(result) {
+                self.ships = result;
+            },
+            dataType: "json"
+        });
 
     self.boardControl = new gameBoardController();
 	
@@ -201,12 +211,26 @@
 
     self.postSetup = function(shipData) {
         //console.log(JSON.stringify(shipData));
-        var ships = self.shipModel.getShipsForProcessing();
-        
-        window.setTimeout(console.log(self.shipModel.getShipsForProcessing()),1000);
+        console.log(self.ships);
+        console.log(shipData);
 
+        $.each(shipData, function(key, value) {
+            $.each(self.ships, function(jan, henk) {
+                if (value.name === henk.name) {
+                    henk.startCell = {"x": value.startX, "y": value.startY};
+                    if (value.horizontal === true) {
+                        henk.isVertical = false;
+                    } else {
+                        henk.isVertical = true;
+                    }
+                }
+                           
+            });            
+        });
 
-        self.model.postGameboard(gameId, ships);
+        console.log(self.ships);
+
+        self.model.postGameboard(gameId, JSON.parse(JSON.stringify(self.ships)));
 
         self.openGamesScreen();
 
