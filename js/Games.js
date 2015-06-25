@@ -70,7 +70,7 @@ function GamesModel() {
 
     self.getGamesFromAPI = function(callback) {
         $.ajax({
-            url:    'https://zeeslagavans.herokuapp.com/users/me/games?token='
+            url:    'https://zeeslagavans2.herokuapp.com/users/me/games?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function(result) {
                 callback(result);
@@ -85,7 +85,7 @@ function GamesModel() {
 
     self.getAIGame = function(){
         $.ajax({
-            url:    'https://zeeslagavans.herokuapp.com/'+ 'games/AI' +'?token='
+            url:    'https://zeeslagavans2.herokuapp.com/'+ 'games/AI' +'?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function() {
                 console.log("ai game gemaakt");
@@ -96,7 +96,7 @@ function GamesModel() {
 
     self.getHumanGame = function(){
         $.ajax({
-            url:    'https://zeeslagavans.herokuapp.com/'+ 'games' +'?token='
+            url:    'https://zeeslagavans2.herokuapp.com/'+ 'games' +'?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function() {
                 console.log("human game gemaakt");
@@ -107,7 +107,7 @@ function GamesModel() {
 
     self.deleteGames = function() {
         $.ajax({
-            url: 'https://zeeslagavans.herokuapp.com/'+'users/me/games'+'?token=' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4', 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'users/me/games'+'?token=' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4', 
             type: 'DELETE',
             succes: function() {
                 console.log("games verwijderd");

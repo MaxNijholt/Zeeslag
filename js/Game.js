@@ -53,28 +53,30 @@
  function gameModel(){
  	var self = this;
 
-    self.shoot = function (x, y){
+    self.shoot = function (gameID, x, y){
 
         var shot = {
             "x":x, 
             "y":y
         };
+        var msg = '';
 
         $.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ localid +'/shots' + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/shots' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: shot,
-            succes: function() {
-                console.log("Post shots is gedaan");
+            success: function(data) {
+                msg = data.toLowerCase();
             }
         });
+        return msg;
     }
 
     self.getGame = function(gameID, callback) {
         $.ajax({
             type: "GET",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             success: function(result) {
                 callback(result);
@@ -82,16 +84,19 @@
         });
     }
 
-    self.postGameboard = function(gameID, obj) {
-        $.ajax({
+    self.postGameboard = function(gameID, obj, callBack) {
+        console.log($.ajax({
             type: "POST",
-            url: 'https://zeeslagavans.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
+            url: 'https://zeeslagavans2.herokuapp.com/'+'games/'+ gameID +'/gameboards' + '?token=' + 
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
-            succes: function() {
-                console.log("Post gameboard is gedaan");
+            success: function() {
+                callBack();
+            },
+            error : function(mes) {
+                console.log(mes);
             }
-        });
+        }));
     }
  }
 
@@ -107,13 +112,15 @@
     self.ships = 'undefined';
 
     $.ajax({
-            url:    'https://zeeslagavans.herokuapp.com/ships?token='
+            url:    'https://zeeslagavans2.herokuapp.com/ships?token='
             + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4",
             success: function(result) {
                 self.ships = result;
             },
             dataType: "json"
         });
+
+    self.gameIP = 'undefined'
 
     self.boardControl = new gameBoardController();
 	
@@ -144,6 +151,8 @@
         }
         else {
         	self.model.getGame(gameId, self.gameView.renderFielddata);
+
+            self.shootingMode();
 
             if (data['yourTurn'] === true) {
                 $('#beurtIndicator').text("Het is jouw beurt!");
@@ -213,7 +222,7 @@
         $.each(shipData, function(key, value) {
             $.each(self.ships, function(jan, henk) {
                 if (value.name === henk.name) {
-                    henk.startCell = {"x": value.startX, "y": value.startY};
+                    henk.startCell = {"x": value.startX.toLowerCase(), "y": value.startY};
                     if (value.horizontal === true) {
                         henk.isVertical = false;
                     } else {
@@ -227,17 +236,42 @@
         var postdata = {"ships" : self.ships }
         console.log(postdata);
 
-        self.model.postGameboard(gameId, JSON.parse(JSON.stringify(self.ships)));
+        self.model.postGameboard(gameId, postdata, self.openGamesScreen);
 
         self.openGamesScreen();
 
     }
 
+    self.shootingMode = function() {
+        $('.container').on('click', '.cell', function() {
+            console.log(self.model.shoot(gameId, $(this).attr('posx'), $(this).attr('posy')));
+                if ($(this).css("backgroundColor") === 'rgb(255, 0, 0)' || $(this).css("backgroundColor") === 'rgb(255, 255, 0)') {
+                    alert('Je hebt hier al een keer geschoten!');                                                  
+                } else{
+                    if (self.model.shoot(gameId, $(this).attr('posx'), $(this).attr('posy')) === "boom" ) {
+                        $(this).css("backgroundColor", "red");
+                    }
+                    if (self.model.shoot(gameId, $(this).attr('posx'), $(this).attr('posy')) === "splash" ) {
+                        $(this).css("backgroundColor", "yellow");
+                    }
+                }
+        });
+        $('.container').on('click','#btn-back',function(){
+            self.openGamesScreen();
+        });
+
+        $('.container').on('click','#btn-send',function(){
+            if (shipData.length < 5) {
+                alert('Je moet alle schepen op het veld zetten!');
+            }
+            else {
+                self.postSetup(shipData);
+            }
+        });
+    }
+
     self.openGamesScreen = function() {
-        var gamesModel = new GamesModel();
-        var gamesView = new GamesView(gamesModel);
-        app.gamesController = new GamesController(gamesView,gamesModel);
-        app.gamesController.renderView();    
+        app.gamesController.renderView();
     }
  }
 
