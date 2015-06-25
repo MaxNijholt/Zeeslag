@@ -8,7 +8,6 @@ function StartView(model){
 
     this.loadView = function() {
         $('.container').load("views/startView");
-        console.log("Henkie testie")
     }
 }
 

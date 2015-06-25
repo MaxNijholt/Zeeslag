@@ -49,7 +49,6 @@ function gameBoardController() {
         for (var i = 1; i < length; i++) {
             var posy = parseInt($(startCell).attr('posy'))+i;
             var posx = $(startCell).attr('posx');
-            console.log(posy);
 
             $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
         }
@@ -65,7 +64,6 @@ function gameBoardController() {
                     for (var i = 1; i < length; i++) {
                         var posy = parseInt($(startCell).attr('posy'))+i;
                         var posx = String.fromCharCode($(startCell).attr('posx').charCodeAt(0));
-                        console.log(posy);
 
                         $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "white");
                     }
@@ -74,7 +72,6 @@ function gameBoardController() {
                     for (var i = 1; i < length; i++) {
                         var posy = parseInt($(startCell).attr('posy'));
                         var posx = String.fromCharCode($(startCell).attr('posx').charCodeAt(0)+i);
-                        console.log(posy);
 
                         $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
                     }
@@ -86,7 +83,6 @@ function gameBoardController() {
                     for (var i = 1; i < length; i++) {
                         var posy = parseInt($(startCell).attr('posy'));
                         var posx = String.fromCharCode($(startCell).attr('posx').charCodeAt(0)+i);
-                        console.log(posy);
 
                         $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "white");
                     }
@@ -95,7 +91,6 @@ function gameBoardController() {
                     for (var i = 1; i < length; i++) {
                         var posy = parseInt($(startCell).attr('posy'))+i;
                         var posx = String.fromCharCode($(startCell).attr('posx').charCodeAt(0));
-                        console.log(posy);
 
                         $("[posx='"+ posx + "'][posy='"+ posy + "']").css("backgroundColor", "blue");
                     }
@@ -104,9 +99,8 @@ function gameBoardController() {
                 }
             }
         }
-        
-
-
     }
+    
+
 }
 

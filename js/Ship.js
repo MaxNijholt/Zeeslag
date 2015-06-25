@@ -18,10 +18,6 @@ function ShipsModel() {
     }
 
     self.getShipsForProcessing = function() {
-        return $.getJSON( "https://zeeslagavans.herokuapp.com/ships?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", function(data) {
-            returnData  = JSON.parse(data);
-            console.log(returnData);
-            return returnData;
-        });
+        return $.getJSON( "https://zeeslagavans.herokuapp.com/ships?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4");
     }
 }

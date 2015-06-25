@@ -33,9 +33,9 @@
         var htmldrie = '</table>';
 
         $.each(ships, function(key, value) {
-            var ship = '<tr>' +
-                '<td> <button class="ship btn btn-default" shiplength="' + value.length + '" shipname="' + value.name + '">'+ value.name + '</button></td>' +
-                    '</tr>';
+            var ship = 	'<tr>' +
+                			'<td> <button class="ship btn btn-default" shiplength="' + value.length + '" shipname="' + value.name + '">'+ value.name + '</button></td>' +
+                    	'</tr>';
             htmltwee = htmltwee + ship;
                        
         });
@@ -89,7 +89,7 @@
             	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Im1uaWpob2x0QGF2YW5zLm5sIg.xAuh6X37ts-EcManb6BGyvISDOTCE2xngZoeI2l6H-4", 
             data: obj,
             succes: function() {
-                console.log("Post is gedaan");
+                console.log("Post gameboard is gedaan");
             }
         });
     }
@@ -116,8 +116,6 @@
 
     self.initBoard = function() {
         var boardHTML = self.boardControl.generateBoardHTML();
-
-        console.log(boardHTML);
 
         $('#grid').replaceWith(boardHTML);
 
@@ -154,12 +152,11 @@
         var shipData = [];
         var placedShips = 0;
 
-        console.log('Klikkers');
         $('.container').on('click','.ship',function(){
             self.selectedShip = $(this).attr('shipname');
             self.selectedShipLength = $(this).attr('shiplength');
 
-            console.log(self.selectedShip);
+            console.log("setupmode "+self.selectedShip);
             this.disabled = true;
         });
 
@@ -167,7 +164,6 @@
 
             if ( typeof self.selectedShip === "undefined") {
                 if ($(this).css("backgroundColor") === 'rgb(0, 0, 255)') {
-                    console.log('Draai');
                     self.boardControl.turnShip($(this), self.selectedShipLength, true, shipData);                                                  
                 } else{
                     alert("Selecteer eerst een schip");
@@ -179,7 +175,7 @@
                 
                 var ship = {name:self.selectedShip, length:self.selectedShipLength, startX:$(this).attr('posx'), startY:$(this).attr('posy'), horizontal:false};
                 shipData.push(ship);
-                console.log(shipData);
+                console.log("setupmode "+shipData);
 
                 self.selectedShip = undefined;
             }
