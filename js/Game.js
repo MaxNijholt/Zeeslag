@@ -224,7 +224,8 @@
             });            
         });
 
-        console.log(self.ships);
+        var postdata = {"ships" : self.ships }
+        console.log(postdata);
 
         self.model.postGameboard(gameId, JSON.parse(JSON.stringify(self.ships)));
 
